@@ -1,0 +1,95 @@
+.grid {
+    display: grid;
+    grid-template-rows: 20% 47% 33%;
+    background-color: #fff0e5;
+}
+
+.container {
+    margin: 200px auto;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.leftContainer h2 {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 28px;
+    font-weight: normal;
+    line-height: 32px;
+    width: 500px;
+    margin-top: 50px;
+}
+
+.or {
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.rightContainer {
+    border: 1px black solid;
+    border-radius: 5px;
+    padding: 100px;
+    box-shadow: 1px 1px black;
+}
+
+.rightContainer:hover {
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.containerChild {
+    display: block;
+    margin: auto;
+    margin-bottom: 10%;
+    padding: 10px;
+    background-color: white;
+    border-radius: 3px;
+}
+
+.containerChild:active {
+    transform: translate(0, 0.1rem);
+}
+
+.button-list {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.button-list * {
+    margin-right: 10px;
+}
+
+input {
+    border-radius: 3px;
+}
+
+input:focus {
+    box-shadow: red 5px;
+    transform: translate(5px 5px);
+}
+
+.title {
+    letter-spacing: 3px;
+}
+
+.leftContainer img {
+    display: block;
+    margin: 0 auto;
+}
+
+@media (max-width: 890px) {
+    .leftContainer {
+        margin: 0 auto;
+    }
+    .rightContainer {
+        position: relative;
+        margin: 0 auto;
+    }
+    .container {
+        margin-top: 100px;
+    }
+}
+
+div p.error-text {
+    background-color: red;
+}
