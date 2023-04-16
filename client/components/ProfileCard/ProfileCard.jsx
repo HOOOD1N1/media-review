@@ -22,45 +22,30 @@ export default function ProfileCard() {
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // useEffect(async() => {
-  //   console.log("Useid is " + location.pathname[location.pathname.length - 1]);
-  //   console.log("Number is " + number);
-  //   const user = JSON.parse(localStorage.getItem("user"));
-  //   console.log("User IS " + user.userId)
-  //   var result = await fetch(
-  //     `http://localhost:8888/userprofile/user/${number}`,
-  //     {
-  //       method: "POST",
-  //       //  'Authorization': `Bearer ${user.userId}-${user.sessionId}-${user.sessionToken} `
-  //     }
-  //   );
+  useEffect(async() => {
+    console.log("Useid is " + location.pathname[location.pathname.length - 1]);
+    console.log("Number is " + number);
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log("User IS " + user.userId)
+    var result = await fetch(
+      `http://localhost:8888/userprofile/user/${number}`,
+      {
+        method: "POST",
+      }
+    );
 
-  //   if (result) {
-  //     const username = await result.json();
-  //     //console.log(username);
-  //     //console.log(username.username.username);
-  //     setUsername(username.username);
-  //     setPhoto(`http://localhost:8888/photos/${username.profile_image}`);
-  //     setNrPosts(username.posts.posts_count);
-  //     setNrComments(username.comments.comment_count);
-  //     setNrReviews(username.reviews.reviews_count);
-  //     //  username?.username &&  setUsername(username);
-  //   }
-  // }, []);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // useEffect(async() => {
-  //   if(verify() === false) {
-  //     const user = JSON.parse(localStorage.getItem("user"));
-  //     const userId = user.userId;
-  //     let result = await fetch(`http://localhost:8888/check/friend/${userId}/${number}`)
-  //     let newResult = await result.json();
-  //     if(newResult.check === true) {
-  //       setCheckFriendship(true);
-  //       setMessage('Friend ✓');
-  //   }
-  //   }
-  // }, [])
+    if (result) {
+      const username = await result.json();
+      //console.log(username);
+      //console.log(username.username.username);
+      setUsername(username.username);
+      setPhoto(`http://localhost:8888/photos/${username.profile_image}`);
+      // setNrPosts(username.posts.posts_count);
+      setNrComments(username.comments.comment_count);
+      setNrReviews(username.reviews.reviews_count);
+      //  username?.username &&  setUsername(username);
+    }
+  }, []);
 
   const handleClickProfilePicture = ( ) => {
     if(verify() === true){

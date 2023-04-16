@@ -45,39 +45,6 @@ router.post('/register', async(req, res) => {
     }
 })
 
-router.post('/userprofile/user/:id', async(req, res) => {
-    var userId = req.params.id;
-
-    try {
-        const result1 = await pool.query(`SELECT username, profile_image FROM users WHERE id=${userId};`);
-        const result2 = await pool.query(`SELECT count(*) as comment_count from comments where author_id=${userId};`);
-        const result3 = await pool.query(`SELECT count(*) as posts_count FROM posts WHERE author_id=${userId};`);
-        const result4 = await pool.query(`SELECT count(*) as reviews_count FROM reviews WHERE author_id=${userId};`);
-        if (result1 && result2 && result3 && result4) {
-            const username = result1.rows[0];
-            const comments = result2.rows[0];
-            const posts = result3.rows[0];
-            const reviews = result4.rows[0];
-            const payload = {
-                profile_image: username.profile_image,
-                username: username.username,
-                comments,
-                posts,
-                reviews
-            };
-            res.status(200).send(payload)
-        }
-    } catch (error) {
-        console.log(error);
-        res.send({
-            status: 'failed',
-            message: 'USER_INFO_RETRIEVAL_ERROR',
-            error: error
-        })
-        res.send(error)
-    }
-});
-
 router.get('/taskbar/photo/:userId', async(req, res) => {
     let userId = req.params.userId;
     try {

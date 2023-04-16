@@ -26,7 +26,7 @@ export default function Main(props) {
 
     return (
         <div>
-            <TaskBar user={userName} history={props.history}/>
+            <TaskBar user={userName}/>
             {/* <div className="main" id="main-div">
 
             <aside className="left aside" id="main-left-box">

@@ -19,9 +19,9 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route exact path="/" element={<Login />} history={this.props.history}/>
-                    <Route exact path="feed" action={({ params }) => {}} element={<MainPage />} history={this.props.history}/>
-                    {/* <Route path="profile/:userId" element={<Profile />} history={this.props.history}/> */}
+                    <Route exact path="/" element={<Login />}/>
+                    <Route exact path="feed" action={({ params }) => {}} element={<MainPage />} />
+                    <Route path="profile/:userId" element={<Profile />} />
                 </Routes>
             </BrowserRouter>
         );

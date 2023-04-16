@@ -1,31 +1,21 @@
 const { pool } = require('../config/db/db');
-
-
+const crypto = require('crypto');
 
 module.exports = {
 
 
     create: async(params) => {
         const { userId } = params
-
-        // try {
-        //     const insert = await pool.query(`insert into "sessions" (user_id, creation_date, session_token) values(6, '2021-03-21', '112112');`);
-        // } catch (err) {
-
-        //     console.error(err)
-        // }
-
-        var sessionId, sessionToken;
-        console.log('create: done');
+        var sessionId;
+        let sessionToken;
         try {
-            const {cryptoRandomString} = await import("crypto-random-string");
-            sessionToken = cryptoRandomString({ length: 10, type: 'base64' });
+            // const {cryptoRandomString} = await import("crypto-random-string");
+            // console.log('HEREEEE: ' + cryptoRandomString({ length: 10, type: 'base64' }));
+            sessionToken = crypto.randomBytes(48).toString('base64url');
+            console.log('create session: done' + `sessionToken is ${sessionToken}`);
             //sessionToken = '123467';
-            const takeId = await pool.query(`insert into "sessions"(user_id, session_token) values(${userId}, '${sessionToken}') RETURNING id;`);
-            //console.log(JSON.stringify(takeId))
-            //const takeId = await pool.query(`select id from sessions where session_token=${sessionToken};`)
-            //const result = await pool.query(`INSERT INTO sessions (creation_date, user_id, session_token) values(${date}, ${userId}, ${sessionToken});`);
-
+            const takeId = await pool.query(`insert into sessions(author_id, session_token) values(${userId}, '${sessionToken}') RETURNING id;`);
+           
             sessionId = takeId.rows[0].id;
 
         } catch (err) {
@@ -55,7 +45,7 @@ module.exports = {
 
         const { userId, sessionId, sessionToken } = params;
         if (userId && sessionId && sessionToken) {
-            const validSession = await pool.query('select id from sessions where id=$1 and user_id=$2 and session_token=$3', [Number(sessionId), Number(userId), sessionToken])
+            const validSession = await pool.query('select id from sessions where id=$1 and author_id=$2 and session_token=$3', [Number(sessionId), Number(userId), sessionToken])
             if (validSession.rowCount > 0) {
                 return true
             } else {

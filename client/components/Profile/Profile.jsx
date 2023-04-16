@@ -23,15 +23,15 @@ import ProfileUserComments from '../ProfileUserComments/ProfileUserComments';
 
     return (
         <div >
-            <TaskBar history={props.history}/>
+            <TaskBar/>
             <div className="profile-page">
             <ProfileCard/>
-            <ul className="buttons">
+            {/* <ul className="buttons">
                 <li className="button" >
                     <span id ='user-posts' onClick={()=>{
                         console.log('clicked on posts')
                         setItem('user-posts');
-                    }}>Posts</span>
+                    }}>Crowdfunding Projects</span>
                 </li>
                 <li className="button" >
                     <span id ='user-reviews' onClick={()=>{
@@ -45,7 +45,7 @@ import ProfileUserComments from '../ProfileUserComments/ProfileUserComments';
                         setItem('user-comments');
                     }}>Comments</span>
                 </li>
-            </ul>
+            </ul> */}
             {/* <CardList page='profile' type={item}/> */}
            {item === 'user-comments' ? <ProfileUserComments routerUser={props.routerUser} parent='profile'/> : null}
            {item === 'user-reviews' ? <ProfileUserReviews routerUser={props.routerUser} parent='profile'/> : null}

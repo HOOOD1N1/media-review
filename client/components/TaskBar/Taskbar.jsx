@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import './TaskBar.css';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+
 
 export default function TaskBar(props){
     const [username, setUsername] = useState('');
     const [image, setImage] = useState('')
     const [results, setResults] = useState([]);
+    const navigate = useNavigate();
 
     const user = JSON.parse(localStorage.getItem('user'))
     const handleLogOut = async() => {
+        console.log("HEREEEs")
         await fetch(`http://localhost:8888/clear/${user.userId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
+        console.log('delete');
         localStorage.removeItem("user");
-        props.history.push('/');
+        navigate("/");
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

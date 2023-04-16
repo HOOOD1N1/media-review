@@ -50,10 +50,6 @@ export default function Login(props) {
                 console.log('works like ' + JSON.stringify(json));
                 localStorage.setItem('user', JSON.stringify(json));
                 setAuth(true);
-                // setTimeout(() => {
-                    // console.log("User is auth? " + userIsAuth)
-                    //props.history.push("/feed");//history is a prop of Route and pushes a route to redirect
-                // }, 1000);
             })
             .catch(err => changeErrorValue());
     }

@@ -8,6 +8,7 @@ const { json } = require("body-parser");
 const { pool } = require("./config/db/db");
 var multer = require('multer');
 const userRouter = require('./routes/user-routes');
+const crypto = require('crypto');
 
 var upload = multer({
     storage: multer.diskStorage({
@@ -15,8 +16,7 @@ var upload = multer({
         filename: async function(req, file, cb) {
             //req.body is empty...
             //How could I get the new_file_name property sent from client here?
-            const {cryptoRandomString} = await import("crypto-random-string");
-            let newToken = cryptoRandomString({ length: 10, type: 'hex' });
+            let newToken = crypto.randomBytes(48).toString('hex');
             console.log(file)
             cb(null, newToken + "." + file.mimetype.split('/')[1]);
         }
@@ -84,14 +84,25 @@ app.post('/main/user/:id', async(req, res) => {
 
 app.delete('/clear/:userId', async(req, res) => {
     const userId = req.params.userId;
-    await pool.query(`DELETE FROM sessions WHERE user_id=${userId};`)
-    res.status(200).send();
+    console.log(`userid when deleting is ${userId}`);
+    try{
+        await pool.query(`DELETE FROM sessions WHERE author_id=${userId};`)
+    }catch(err){
+        console.log('error while deleting ', err);
+        res.status(500);
+        res.send();
+    }
+    res.status(200);
+    res.send();
 });
 //check if sessions already exists
 app.post('/session/validate/:userId', async(req, res) => {
 const { sessionToken } = req.body;
 const { userId } = req.params
-const result = await pool.query(`SELECT id FROM sessions WHERE user_id=$1 AND session_token=$2;`, [userId, sessionToken])
+
+console.log(`userid is ${userId} and sessionToken is ${sessionToken}`);
+
+const result = await pool.query(`SELECT id FROM sessions WHERE author_id=$1 AND session_token=$2;`, [userId, sessionToken])
 if (result.rowCount === 1) {
     res.send(JSON.stringify({ 'status': 'success', message: 'VALID_SESSION' }));
 } else {
