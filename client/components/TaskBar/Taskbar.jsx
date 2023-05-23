@@ -11,14 +11,12 @@ export default function TaskBar(props){
 
     const user = JSON.parse(localStorage.getItem('user'))
     const handleLogOut = async() => {
-        console.log("HEREEEs")
         await fetch(`http://localhost:8888/clear/${user.userId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        console.log('delete');
         localStorage.removeItem("user");
         navigate("/");
     }
@@ -69,7 +67,7 @@ export default function TaskBar(props){
         <nav className="taskbar" id="taskbar-id">
             <Link to='/feed' style={{textDecoration:'none'}}><span className="logo"><img src="http://localhost:8888/photos/MyStories.png" alt="My Stories"/></span></Link>
             <span className="searchbar" >
-                <input type="search" name="search" id="search" placeholder="Search" autocomplete="off" onClick={handleSearchShow} onKeyUp={(e) => handleSearch(e)}/>
+                <input type="search" name="search" id="search" placeholder="Search" autoComplete="off" onClick={handleSearchShow} onKeyUp={(e) => handleSearch(e)}/>
                 <div id="search-results" style={{display:'none'}}>
                     {results.map(result => {
                        return <Link to={`/profile/${result.id}`} style={{textDecoration: 'none', zIndex: 10}}>
@@ -110,10 +108,7 @@ export default function TaskBar(props){
                     
                 </div>
             </span>
-            </span>
-            
-
-            
+            </span>            
         </nav>
     );
 }

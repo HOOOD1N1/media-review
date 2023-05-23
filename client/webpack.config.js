@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
     entry: "./src/index.js",
@@ -7,15 +8,17 @@ module.exports = {
     output: {
         filename: "bundle.[fullhash].js",
         path: path.resolve(__dirname, "dist"),
+        publicPath: '/'
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: "./src/index.html",
         }),
+        new Dotenv(),
     ],
     resolve: {
         modules: [__dirname, "src", "node_modules"],
-        extensions: ["*", ".js", ".jsx"],
+        extensions: [".*", ".js", ".jsx"],
     },
     module:{
         rules: [
@@ -32,7 +35,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
-                use: ["style-loader", "css-loader"]
+                use: ["style-loader", "css-loader", "postcss-loader"]
             },
             {
                 test: /\.(png|svg|jpg|jpeg|gif|ttf)$/i,
@@ -40,4 +43,7 @@ module.exports = {
             },
         ],
     },
+    devServer: {
+        historyApiFallback: true,
+     },
 };

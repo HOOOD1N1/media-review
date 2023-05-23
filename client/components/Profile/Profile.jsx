@@ -20,6 +20,18 @@ import ProfileUserComments from '../ProfileUserComments/ProfileUserComments';
         //window.setItem = setItem;
     },[]);
 
+    useEffect(()=> {      
+        var user = JSON.parse(localStorage.getItem('user'));
+         fetch(`http://localhost:8888/main/user/${user.userId}`, {
+             'method': 'POST'
+             //'Authorization': `Bearer ${user.userId}-${user.sessionId}-${user.sessionToken} `
+         }).then(response => {response = response.json(); return response;})
+         .then(responseJson => {setUserName(responseJson.username); setImage(`http://localhost:8888/photos/${responseJson.profile_image}`)})
+         .catch(error => console.log(error));
+         //.then(username => setUserName(username))
+    },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+
 
     return (
         <div >
