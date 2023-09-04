@@ -25,7 +25,7 @@ router.post('/login', async(req, res) => {
     const result = await User.authenticate({ email: email, password: password })
     console.log('here is payload' + JSON.stringify(result.payload));
     if (result) {
-        res.send(JSON.stringify(result.payload));
+        res.send(JSON.stringify(result));
     }
 });
 
