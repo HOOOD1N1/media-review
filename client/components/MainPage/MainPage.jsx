@@ -21,13 +21,7 @@ export default function Main(props) {
     const navigate = useNavigate();
   
     useEffect(()=> {      
-        var user = JSON.parse(localStorage.getItem('user'));
-         fetch(`http://localhost:8888/main/user/${user.userId}`, {
-             'method': 'POST'
-             //'Authorization': `Bearer ${user.userId}-${user.sessionId}-${user.sessionToken} `
-         }).then(response => {response = response.json(); return response;})
-         .then(responseJson => {setUserName(responseJson.username); setImage(`http://localhost:8888/photos/${responseJson.profile_image}`)})
-         .catch(error => console.log(error));
+        getUser();
         //  .then(username => setUserName(username))
     },[])
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,6 +36,16 @@ export default function Main(props) {
     useEffect(() => {
         if(contract) fetchCampaigns();
     }, [address, contract]);
+
+    const getUser = async() => {
+        let user = await JSON.parse(localStorage.getItem('user'));
+        await fetch(`http://localhost:8888/main/user/${user.payload.userId}`, {
+            'method': 'POST'
+            //'Authorization': `Bearer ${user.userId}-${user.sessionId}-${user.sessionToken} `
+        }).then(response => {response = response.json(); return response;})
+        .then(responseJson => {setUserName(responseJson.username); setImage(`http://localhost:8888/photos/${responseJson.profile_image}`)})
+        .catch(error => console.log(error));
+    }
 
 
     return (

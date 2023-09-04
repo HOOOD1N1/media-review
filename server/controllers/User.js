@@ -21,11 +21,15 @@ module.exports = {
                 const date = new Date();
                 const hash = await bcrypt.hash(password, 10);
                 console.log("password is" + hash + "" + typeof(hash));
-                const result = await pool.query('INSERT INTO users (email, username, password, creation_date) VALUES ($1, $2, $3, $4)', [email, username, hash, date])
+                const result = await pool.query('INSERT INTO users (email, username, password, creation_date) VALUES ($1, $2, $3, $4) returning id', [email, username, hash, date])
                 if (result.rowCount === 1) {
+                    const sessionResult = Sessions.create({ userId: result.rows[0].id })
+                    console.log('authenticate: done');
+                    
                     return {
                         status: 'success',
-                        message: 'USER_REGISTERED_SUCCESSFULLY'
+                        message: 'USER_REGISTERED_SUCCESSFULLY',
+                        payload: (await sessionResult).payload
                     }
                 }
             } catch (err) {
