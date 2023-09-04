@@ -26,7 +26,7 @@ export default function ProfileCard() {
     console.log("Useid is " + location.pathname[location.pathname.length - 1]);
     console.log("Number is " + number);
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("User IS " + user.userId)
+    console.log("User IS " + user.payload.userId)
     var result = await fetch(
       `http://localhost:8888/userprofile/user/${number}`,
       {
@@ -78,7 +78,7 @@ export default function ProfileCard() {
         //   headers: {
         //     "Content-Type": "multipart/form-data",
         //   },
-          //  'Authorization': `Bearer ${user.userId}-${user.sessionId}-${user.sessionToken} `
+          //  'Authorization': `Bearer ${user.payload.userId}-${user.sessionId}-${user.sessionToken} `
           body:  fData,
         }
       );
@@ -92,8 +92,8 @@ export default function ProfileCard() {
   }
   const verify = () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("THe pair is " + number + " " + user.userId)
-    if(number == user.userId){
+    console.log("THe pair is " + number + " " + user.payload.userId)
+    if(number == user.payload.userId){
       console.log("YES");
       return true;
     }

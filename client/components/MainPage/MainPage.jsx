@@ -41,7 +41,7 @@ export default function Main(props) {
         let user = await JSON.parse(localStorage.getItem('user'));
         await fetch(`http://localhost:8888/main/user/${user.payload.userId}`, {
             'method': 'POST'
-            //'Authorization': `Bearer ${user.userId}-${user.sessionId}-${user.sessionToken} `
+            //'Authorization': `Bearer ${user.payload.userId}-${user.sessionId}-${user.sessionToken} `
         }).then(response => {response = response.json(); return response;})
         .then(responseJson => {setUserName(responseJson.username); setImage(`http://localhost:8888/photos/${responseJson.profile_image}`)})
         .catch(error => console.log(error));

@@ -11,7 +11,7 @@ export default function TaskBar(props){
 
     const user = JSON.parse(localStorage.getItem('user'))
     const handleLogOut = async() => {
-        await fetch(`http://localhost:8888/clear/${user.userId}`, {
+        await fetch(`http://localhost:8888/clear/${user.payload.userId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ export default function TaskBar(props){
 
     const getPhoto = async()=> {
 
-        let photo = await fetch(`http://localhost:8888/taskbar/photo/${user.userId}`);
+        let photo = await fetch(`http://localhost:8888/taskbar/photo/${user.payload.userId}`);
         let JSONphoto = await photo.json();
         //console.log("JSON photo is " + JSONphoto.profile_image)
         //let profileImage = JSON.parse(JSONphoto.profile_image)
@@ -84,7 +84,7 @@ export default function TaskBar(props){
             <span className="right_side">
 
             <img src="http://localhost:8888/photos/bell.png" alt="notifications" style={{cursor:'pointer',width:'25px', height:'25px', margin:'auto', marginRight:'20px'}}/>
-            <Link style={{textDecoration: "none", padding: "5px"}} to={`/profile/${user.userId}`} >
+            <Link style={{textDecoration: "none", padding: "5px"}} to={`/profile/${user.payload.userId}`} >
                     <span className="taskbar-image" style={{position:'relative', width:'40px'}}>
                         <span><img style={{width: '40px', height:'40px', borderRadius: '50%', position: 'absolute', left: '0', top: '0'}} src={image} alt="user_image" className="profileImage"/></span>
                         
@@ -99,7 +99,7 @@ export default function TaskBar(props){
                 <img id="more-button" src="http://localhost:8888/photos/ellipsis.png" alt="More" onClick={() => showMoreList()} />
                 <div id="more-list">
                     <ul id="more-list-items">
-                    <Link style={{textDecoration: "none", padding: "5px"}} to={`/profile/${user.userId}`} >
+                    <Link style={{textDecoration: "none", padding: "5px"}} to={`/profile/${user.payload.userId}`} >
                         <li id="more-profile">
                             Profile
                     </li></Link>

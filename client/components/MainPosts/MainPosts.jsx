@@ -17,7 +17,7 @@ export default function MainPosts(props) {
 //         {
 //           method: "POST",
 //           headers: {
-//             //'Authorization': `Bearer ${user.userId}-${user.sessionId}-${user.sessionToken} `,
+//             //'Authorization': `Bearer ${user.payload.userId}-${user.sessionId}-${user.sessionToken} `,
 //             "Content-Type": "application/json",
 //           },
 //         }

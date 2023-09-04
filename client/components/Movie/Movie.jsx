@@ -24,7 +24,7 @@ export default function Movie() {
     console.log("Useid is " + location.pathname[location.pathname.length - 1]);
     console.log("Number is " + number);
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log("User IS " + user.userId)
+    console.log("User IS " + user.payload.userId)
       setNrComments(username.comments.comment_count);
       setNrReviews(username.reviews.reviews_count);
     };
