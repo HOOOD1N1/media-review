@@ -23,8 +23,7 @@ export default function MovieCard(props) {
 
     useEffect(() => {
         if(movieDetails) {
-            console.log('show movie details')
-            navigate('/movies/0', {state:{title, rating, description, releaseDate, moviePhoto}})
+            getMovieId();
         }
     }, [movieDetails]);
 
@@ -35,6 +34,28 @@ export default function MovieCard(props) {
             return 'orange';
         }
         return 'red';
+    }
+
+    const getMovieId = () => {
+        
+            console.log('show movie details');
+
+            const postObject = {
+                movie_title: props.title,
+                description: props.overview,
+                release_date: props.releaseDate
+            }
+
+
+            fetch("http://localhost:8888/movie", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postObject)
+            }).then(response => {response = response.json(); return response;})
+            .then(responseJson => {navigate(`/movies/${responseJson.payload.movieId}`, {state:{title, rating, description, releaseDate, moviePhoto}})})
+            .catch(error => console.log(error));
     }
     
 

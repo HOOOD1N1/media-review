@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const http = require('http');
 const User = require("./controllers/User");
+const Movie = require("./controllers/Movie");
 const multiparty = require("connect-multiparty");
 const { json } = require("body-parser");
 const { pool } = require("./config/db/db");
@@ -348,6 +349,21 @@ app.post('/register', async(req, res) => {
         console.log("there is a result")
         const { status, message } = result;
         if (status === 'error') {
+            res.status(500).send(result)
+        } else {
+            res.send(result)
+        }
+    }
+});
+
+app.post('/movie', async(req, res) => {
+    console.log(req.body)
+    const result = await Movie.create(req.body);
+    if(result) {
+        console.log("movie result")
+        const { status, message } = result;
+        if (status === 'error') {
+            console.log("Error when creating a movie");
             res.status(500).send(result)
         } else {
             res.send(result)
