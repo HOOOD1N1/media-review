@@ -370,6 +370,24 @@ app.post('/movie', async(req, res) => {
         }
     }
 });
+app.post('/review/:movieId', async(req, res) => {
+    movieId = req.params.movieId;
+    userId = req.body.userId;
+    reviewText = req.body.reviewText;
+    reviewGrade = req.body.reviewGrade;
+    const result = await pool.query('insert into reviews(post_id, author_id, review, review_grade) values ($1, $2, $3, $4)',[movieId, userId, reviewText, reviewGrade]);
+    
+    if(result) {
+        return res.status(200).send({
+            status: 'success',
+            message: 'NEW_REVIEW_ADDED'
+        })
+    }
+    return res.status(500).send({
+        status: 'failure',
+        message: 'ERROR_WHEN_ADDING_NEW_REVIEW' 
+    })
+})
 
 const server = http.createServer(app);
 

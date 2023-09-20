@@ -19,6 +19,19 @@ module.exports = {
     resolve: {
         modules: [__dirname, "src", "node_modules"],
         extensions: [".*", ".js", ".jsx"],
+        fallback: {
+            "fs": false,
+            "tls": false,
+            "net": false,
+            "path": false,
+            "zlib": false,
+            "http": false,
+            "https": false,
+            "stream": false,
+            "crypto": false,
+            "url": false,
+            "crypto-browserify": false,
+          } 
     },
     module:{
         rules: [

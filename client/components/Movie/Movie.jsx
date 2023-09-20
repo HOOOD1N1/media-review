@@ -2,12 +2,16 @@ import React from "react";
 import "./Movie.css";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useStateContext } from '../../context/index.jsx';
+import CreateCampaignButton from "../CreateCampaignButton/CreateCampaignButton";
 
 export default function Movie() {
 
-  const [nrComments, setNrComments] = useState(0);
   const [nrReviews, setNrReviews] = useState(0);
-  const [userName, setUserName] = useState('');
+  const [reviewsList, setReviewsList] = useState([]);
+  const [reviewText, setReviewText] = useState("");
+  const [reviewGrade, setReviewGrade] = useState(0);
+  const { connect, address } = useStateContext();
   const location = useLocation();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var number = 0;
@@ -15,25 +19,31 @@ export default function Movie() {
   var powerOfTen = 0;
   while (location.pathname[i] !== "/") {
     number = number + location.pathname[i] * Math.pow(10, powerOfTen);
-    console.log(number);
     powerOfTen++;
     i--;
   }
 
-  const getCounts = async() => {
-    console.log("Useid is " + location.pathname[location.pathname.length - 1]);
-    console.log("Number is " + number);
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log("User IS " + user.payload.userId)
-      setNrComments(username.comments.comment_count);
-      setNrReviews(username.reviews.reviews_count);
-    };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    getCounts()
-  }
-  , []);
+  const handleReview = async (e) => {
+    const userId = JSON.parse(localStorage.getItem('user')).payload.userId;
+    console.log('sending review');
+    const review = await fetch(`http://localhost:8888/review/${number}`, {
+        
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: {
+              userId: userId,
+              reviewText: reviewText,
+              review: e.target.value,
+              reviewGrade: reviewGrade
+            }
+          
+        }
+        );
+        const jsonLikes = await review.json();
+        setReviewsList([jsonLikes, ...reviewsList]);
+}
       
 
   return (
@@ -65,13 +75,21 @@ export default function Movie() {
 
     <div className="reviews-section">
       <div className="review-input-box">
-        <input type="text" name="review" id="review-input" />
+        <input type="text" name="review" id="review-input" onChange={e => setReviewText(e.target.value)}/>
         <div className="review-input-buttons">
-          <div>
+          {/* <div>
             <input type="checkbox" name="review-special" id="review-special" />
             <label htmlFor="review-special" id="review-special-text">Check this for special list</label>
-          </div>
-          <button className="editor_card_button">Submit</button>
+          </div> */}
+        <CreateCampaignButton
+            btnType="button"
+            title={address ? 'Connected' : 'Connect for special vote'}
+            styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+            isDisabled={address ? true : false}
+            handleClick={() =>  connect()}
+        />
+        <input type="number" name="review_grade" id="review_grade" max={10} min={0} onChange={e => setReviewGrade(e.target.value)}/>
+          <button className="editor_card_button" onClick={e => handleReview(e)}>Submit</button>
         </div>
       </div>
       <div className="review-columns">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import TaskBar from '../TaskBar/TaskBar';
+import TaskBar from "../TaskBar/TaskBar";
 import MainPosts from '../MainPosts/MainPosts';
 import {Link} from 'react-router-dom';
 // import "./MainPage.css";
@@ -12,6 +12,7 @@ import CampaignList from "../CampaignList/CampaignList";
 
 export default function Main(props) {
     const [messages, setMessage] = useState([]);
+    const [cards, setCards] = useState([]);
     const [image, setImage] = useState();
     const [userName, setUserName] = useState('');
     const [text, setText] = useState('');
@@ -19,13 +20,41 @@ export default function Main(props) {
     const [campaigns, setCampaigns] = useState([]);
     const { connect, address, contract, getCampaigns } = useStateContext();
     const navigate = useNavigate();
+    const searchURL = process.env.BASE_URL + '/search/movie?' + process.env.API_KEY;
   
     useEffect(()=> {      
         getUser();
+        getMovies();
         //  .then(username => setUserName(username))
     },[])
     // eslint-disable-next-line react-hooks/exhaustive-deps
     
+    const getMovies = async() => {
+          const movies = await fetch(process.env.BASE_URL + '/discover/movie?sort_by=popularity.desc' + `&${process.env.API_KEY}`);
+    
+          const moviesArray = await movies.json();
+          if(moviesArray){
+            // console.log('moviesArray is ' + JSON.stringify(moviesArray));
+            let resultedObject = JSON.stringify(moviesArray);
+            let JsonObject = JSON.parse(resultedObject);
+            setCards(JsonObject.results);
+          }
+      };
+
+      const handleSearch = async(e) =>{
+        let val = e.target.value;
+            let newResults, result;
+            if(val.length > 0) {
+                result = await fetch(searchURL + '&query=' + val) 
+                newResults = await result.json()
+                let resultedObject = JSON.stringify(newResults);
+                let JsonObject = JSON.parse(resultedObject);
+                setCards(JsonObject.results)
+            }else{
+                getMovies()
+            }  
+    }
+
     const fetchCampaigns = async () => {
         setIsLoading(true);
         const data = await getCampaigns();
@@ -50,12 +79,13 @@ export default function Main(props) {
 
     return (
         <div>
-            <TaskBar user={userName}/>
-            <CardList />
+            <TaskBar user={userName} setCards={setCards} handleSearch={handleSearch}/>
+            <CardList cards={cards} setCards={setCards}/>
             <CreateCampaignButton
                 btnType="button"
                 title={address ? 'Create a campaign' : 'Connect to create'}
                 styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+                isDisabled={false}
                 handleClick={() => {
                     if(address) navigate('/campaigns/create')
                     else connect()

@@ -1,4 +1,5 @@
 import React, { useContext, createContext } from 'react';
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 import { useAddress, useContract, useMetamask, useContractWrite } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
@@ -7,7 +8,17 @@ import { EditionMetadataWithOwnerOutputSchema } from '@thirdweb-dev/sdk';
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
-  const { contract } = useContract('0x496567b2a2b6dD4dD6C7e2Cd602bc88D33Ea083a');
+  const { contract } = useContract('0xaa55C232933515909BfF5C2e79542DB26Eb5AD99');
+  // if it doesn't work, try
+  // const sdk = ThirdwebSDK.fromPrivateKey(
+  //   process.env.PRIVATE_KEY, // Your wallet's private key (only required for write operations)
+  //   "ethereum",
+  //   {
+  //     clientId:  process.env.CLIENT_ID, // Use client id if using on the client side, get it from dashboard settings
+  //     secretKey:  process.env.SECRET_KEY, // Use secret key if using on the server, get it from dashboard settings
+  //   },
+  // );
+  // const contract = await sdk.getContract("{{contract_address}}");
 
   const address = useAddress();
   const connect = useMetamask();

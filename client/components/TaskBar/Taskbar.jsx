@@ -47,14 +47,6 @@ export default function TaskBar(props){
         document.getElementById("search-results").style.display = 'block';
             
     }
-    const handleSearch =async(e) =>{
-        let val = e.target.value;
-        if(val !== ""){
-        let result = await fetch(`http://localhost:8888/query/search?value=${val}`)
-        let newResults = await result.json()
-        setResults(newResults.results)
-        }
-    }
 
     const showMoreList = () => {
         let x = document.getElementById('more-list-items');
@@ -67,7 +59,7 @@ export default function TaskBar(props){
         <nav className="taskbar" id="taskbar-id">
             <Link to='/feed' style={{textDecoration:'none'}}><span className="logo"><img src="http://localhost:8888/photos/MyStories.png" alt="My Stories"/></span></Link>
             <span className="searchbar" >
-                <input type="search" name="search" id="search" placeholder="Search" autoComplete="off" onClick={handleSearchShow} onKeyUp={(e) => handleSearch(e)}/>
+                <input type="search" name="search" id="search" placeholder="Search" autoComplete="off" onChange={(e) => props.handleSearch(e)}/>
                 <div id="search-results" style={{display:'none'}}>
                     {results.map(result => {
                        return <Link to={`/profile/${result.id}`} style={{textDecoration: 'none', zIndex: 10}}>

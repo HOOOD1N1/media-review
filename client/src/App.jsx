@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { ethers } from 'ethers';
 // import * as dotenv from 'dotenv';
 import Login from '../components/Login/Login.jsx';
 import MainPage from '../components/MainPage/MainPage.jsx';
@@ -27,7 +28,8 @@ class App extends Component {
 
     render() {
         return (
-            <ThirdwebProvider activeChain={Sepolia}>
+            <ThirdwebProvider activeChain={Sepolia} signer={new ethers.providers.Web3Provider(window.ethereum).getSigner()}
+            clientId={process.env.CLIENT_ID}>
                 <BrowserRouter>
                     <StateContextProvider>
                         <Routes>

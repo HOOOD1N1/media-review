@@ -111,7 +111,13 @@
     color: white;
     margin-left: 5px;
 }
+#normal-column {
+    background-color: white;
+}
 
+#special-column {
+    background-color: white;
+}
 
 @media screen and (max-width: 750px) {
     .profile-card {
