@@ -375,7 +375,14 @@ app.post('/review/:movieId', async(req, res) => {
     userId = req.body.userId;
     reviewText = req.body.reviewText;
     reviewGrade = req.body.reviewGrade;
-    const result = await pool.query('insert into reviews(post_id, author_id, review, review_grade) values ($1, $2, $3, $4)',[movieId, userId, reviewText, reviewGrade]);
+
+    const alreadyExists = await pool.query(`select id from reviews where author_id=${userId} and post_id=${movieId};`);
+
+    let result = null;
+
+    if(!alreadyExists.rows[0]) {
+        result = await pool.query('insert into reviews(post_id, author_id, review, review_grade) values ($1, $2, $3, $4)',[movieId, userId, reviewText, reviewGrade]);
+    }
     
     if(result) {
         return res.status(200).send({

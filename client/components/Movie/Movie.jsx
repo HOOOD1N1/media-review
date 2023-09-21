@@ -23,7 +23,7 @@ export default function Movie() {
     i--;
   }
 
-  const handleReview = async (e) => {
+  const handleReview = async () => {
     const userId = JSON.parse(localStorage.getItem('user')).payload.userId;
     console.log('sending review');
     const review = await fetch(`http://localhost:8888/review/${number}`, {
@@ -32,12 +32,11 @@ export default function Movie() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: {
+            body: JSON.stringify({
               userId: userId,
               reviewText: reviewText,
-              review: e.target.value,
               reviewGrade: reviewGrade
-            }
+            })
           
         }
         );
@@ -89,7 +88,7 @@ export default function Movie() {
             handleClick={() =>  connect()}
         />
         <input type="number" name="review_grade" id="review_grade" max={10} min={0} onChange={e => setReviewGrade(e.target.value)}/>
-          <button className="editor_card_button" onClick={e => handleReview(e)}>Submit</button>
+          <button className="editor_card_button" onClick={() => handleReview()}>Submit</button>
         </div>
       </div>
       <div className="review-columns">
