@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useStateContext } from '../../context/index.jsx';
 import CreateCampaignButton from "../CreateCampaignButton/CreateCampaignButton";
+import ReviewCard from "../ReviewCard/ReviewCard";
 
 export default function Movie() {
 
@@ -11,6 +12,7 @@ export default function Movie() {
   const [reviewsList, setReviewsList] = useState([]);
   const [reviewText, setReviewText] = useState("");
   const [reviewGrade, setReviewGrade] = useState(0);
+  const [reviewList, setReviewList] = useState([]);
   const { connect, address } = useStateContext();
   const location = useLocation();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,7 +45,18 @@ export default function Movie() {
         const jsonLikes = await review.json();
         setReviewsList([jsonLikes, ...reviewsList]);
 }
-      
+
+  const handleFetchedReviewList = async() => {
+    const fetchedReviewList = await fetch(`http://localhost:8888/reviews/${number}`);
+
+      const reviewListJSON = await fetchedReviewList.json();
+          if(reviewListJSON){
+            setReviewList(reviewListJSON);
+          }
+  }
+    useEffect(() => {
+     handleFetchedReviewList();
+    }, []);  
 
   return (
     <>
@@ -96,7 +109,13 @@ export default function Movie() {
         Special Column
       </span>
       <span id="normal-column">
-        Normal column
+      {reviewList.length > 0
+        ? reviewList.map((review, i) => (
+            <ReviewCard id={i} review={review}/>
+          ))
+        : (
+          <span>There are no reviews</span>
+        )}
       </span>
       </div>
     </div>
