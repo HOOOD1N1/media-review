@@ -394,7 +394,21 @@ app.post('/review/:movieId', async(req, res) => {
         status: 'failure',
         message: 'ERROR_WHEN_ADDING_NEW_REVIEW' 
     })
-})
+});
+
+app.get('/reviews/:movieId', async(req, res) => {
+    movieId = req.params.movieId;
+
+    const result = await pool.query(`select * from reviews where post_id=${movieId};`);
+    
+    if(result) {
+        return res.status(200).json(result.rows)
+    }
+    return res.status(500).send({
+        status: 'failure',
+        message: 'ERROR_WHEN_RETRIEVING_REVIEWS' 
+    })
+});
 
 const server = http.createServer(app);
 
