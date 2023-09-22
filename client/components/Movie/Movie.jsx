@@ -57,6 +57,7 @@ export default function Movie() {
       // console.log("The reviewList is ", reviewListJSON);
           if(reviewListJSON){
             setReviewList(reviewListJSON);
+            setNrReviews(reviewListJSON.length)
           }
   }
     useEffect(() => {
