@@ -50,6 +50,7 @@ export default function Movie() {
     const fetchedReviewList = await fetch(`http://localhost:8888/reviews/${number}`);
 
       const reviewListJSON = await fetchedReviewList.json();
+      // console.log("The reviewList is ", reviewListJSON);
           if(reviewListJSON){
             setReviewList(reviewListJSON);
           }

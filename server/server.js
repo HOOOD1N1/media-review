@@ -399,7 +399,8 @@ app.post('/review/:movieId', async(req, res) => {
 app.get('/reviews/:movieId', async(req, res) => {
     movieId = req.params.movieId;
 
-    const result = await pool.query(`select * from reviews where post_id=${movieId};`);
+    const result = await pool.query(`select reviews.post_id, reviews.author_id, reviews.creation_date, reviews.review, reviews.likes, reviews.review_grade, 
+    users.username, users.profile_image from reviews inner join users on reviews.author_id=users.id where post_id=${movieId};`);
     
     if(result) {
         return res.status(200).json(result.rows)
