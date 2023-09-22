@@ -13,6 +13,7 @@ export default function Movie() {
   const [reviewText, setReviewText] = useState("");
   const [reviewGrade, setReviewGrade] = useState(0);
   const [reviewList, setReviewList] = useState([]);
+  const [showErrorBanner, setShowErrorBanner] = useState("");
   const { connect, address } = useStateContext();
   const location = useLocation();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,6 +44,9 @@ export default function Movie() {
         }
         );
         const jsonLikes = await review.json();
+        if(jsonLikes.message === "REVIEW_ALREADY_EXISTS") {
+          setShowErrorBanner("You already wrote a review for this movie");
+        }
         setReviewsList([jsonLikes, ...reviewsList]);
 }
 
@@ -57,7 +61,21 @@ export default function Movie() {
   }
     useEffect(() => {
      handleFetchedReviewList();
-    }, []);  
+    }, []);
+    
+    const handleReviewChange = (e) => {
+      setReviewText(e.target.value);
+      if(showErrorBanner !== ""){
+        setShowErrorBanner("");
+      }
+    }
+
+    const handleReviewGradeChange = (e) => {
+      setReviewGrade(e.target.value);
+      if(showErrorBanner !== ""){
+        setShowErrorBanner("");
+      }
+    }
 
   return (
     <>
@@ -88,12 +106,9 @@ export default function Movie() {
 
     <div className="reviews-section">
       <div className="review-input-box">
-        <input type="text" name="review" id="review-input" onChange={e => setReviewText(e.target.value)}/>
+        <input type="text" name="review" id="review-input" onChange={e => handleReviewChange(e)}/>
+        {showErrorBanner !== "" ? <div id="error_banner">{showErrorBanner}</div> : null}
         <div className="review-input-buttons">
-          {/* <div>
-            <input type="checkbox" name="review-special" id="review-special" />
-            <label htmlFor="review-special" id="review-special-text">Check this for special list</label>
-          </div> */}
         <CreateCampaignButton
             btnType="button"
             title={address ? 'Connected' : 'Connect for special vote'}
@@ -101,7 +116,7 @@ export default function Movie() {
             isDisabled={address ? true : false}
             handleClick={() =>  connect()}
         />
-        <input type="number" name="review_grade" id="review_grade" max={10} min={0} onChange={e => setReviewGrade(e.target.value)}/>
+        <input type="number" name="review_grade" id="review_grade" max={10} min={0} onChange={e => handleReviewGradeChange(e)}/>
           <button className="editor_card_button" onClick={() => handleReview()}>Submit</button>
         </div>
       </div>

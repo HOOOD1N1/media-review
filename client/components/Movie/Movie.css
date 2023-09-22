@@ -118,6 +118,9 @@
 #special-column {
     background-color: white;
 }
+#error_banner{
+    background-color: red;
+}
 
 @media screen and (max-width: 750px) {
     .profile-card {

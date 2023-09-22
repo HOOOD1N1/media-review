@@ -382,6 +382,11 @@ app.post('/review/:movieId', async(req, res) => {
 
     if(!alreadyExists.rows[0]) {
         result = await pool.query('insert into reviews(post_id, author_id, review, review_grade) values ($1, $2, $3, $4)',[movieId, userId, reviewText, reviewGrade]);
+    } else {
+        return res.status(300).send({
+            status: 'failure',
+            message: 'REVIEW_ALREADY_EXISTS' 
+        })
     }
     
     if(result) {
