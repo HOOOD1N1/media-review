@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useStateContext } from '../../context/index.jsx';
 import CreateCampaignButton from "../CreateCampaignButton/CreateCampaignButton";
 import ReviewCard from "../ReviewCard/ReviewCard";
+import {useReviewStateContextProvider} from '../../context/reviewContext/index.jsx';
 
 export default function Movie() {
 
@@ -14,8 +15,8 @@ export default function Movie() {
   const [reviewGrade, setReviewGrade] = useState(0);
   const [reviewList, setReviewList] = useState([]);
   const [showErrorBanner, setShowErrorBanner] = useState("");
-  const { connect, address } = useStateContext();
   const location = useLocation();
+  const { address, contract, connect, addReview, getAllReviewsOfGivenMovie} = useReviewStateContextProvider();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var number = 0;
   var i = location.pathname.length - 1;
@@ -50,6 +51,18 @@ export default function Movie() {
         setReviewsList([jsonLikes, ...reviewsList]);
 }
 
+  const handleSpecialReview = async () => {
+    const userId = JSON.parse(localStorage.getItem('user')).payload.userId;
+    console.log('sending review');
+    try {
+      await addReview(number, "_username", userId, reviewText, reviewGrade, "profile_image");
+    } catch(error){
+      console.log(error);
+      setShowErrorBanner(error)
+    }
+    
+  }
+
   const handleFetchedReviewList = async() => {
     const fetchedReviewList = await fetch(`http://localhost:8888/reviews/${number}`);
 
@@ -75,6 +88,14 @@ export default function Movie() {
       setReviewGrade(e.target.value);
       if(showErrorBanner !== ""){
         setShowErrorBanner("");
+      }
+    }
+
+    const chooseReviewHandler = () => {
+      if(address) {
+        handleSpecialReview();
+      } else {
+        handleReview();
       }
     }
 
@@ -115,10 +136,14 @@ export default function Movie() {
             title={address ? 'Connected' : 'Connect for special vote'}
             styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
             isDisabled={address ? true : false}
-            handleClick={() =>  connect()}
+            handleClick={() =>  {
+              if(address === undefined || address === "" || !address) {
+                connect()
+              }
+            }}
         />
         <input type="number" name="review_grade" id="review_grade" max={10} min={0} onChange={e => handleReviewGradeChange(e)}/>
-          <button className="editor_card_button" onClick={() => handleReview()}>Submit</button>
+          <button className="editor_card_button" onClick={() => chooseReviewHandler()}>Submit</button>
         </div>
       </div>
       <div className="review-columns">
