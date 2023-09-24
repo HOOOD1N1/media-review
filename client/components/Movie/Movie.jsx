@@ -13,6 +13,7 @@ export default function Movie() {
   const [reviewText, setReviewText] = useState("");
   const [reviewGrade, setReviewGrade] = useState(0);
   const [reviewList, setReviewList] = useState([]);
+  const [specialReviewsList, setSpecialReviewList] = useState([]);
   const [showErrorBanner, setShowErrorBanner] = useState("");
   const location = useLocation();
   const { address, reviewContract, connect, addReview, getAllReviewsOfGivenMovie} = useStateContext();
@@ -75,6 +76,15 @@ export default function Movie() {
     useEffect(() => {
      handleFetchedReviewList();
     }, []);
+
+    const fetchSpecialReviews = async () => {
+      const data = await getAllReviewsOfGivenMovie(number);
+      setSpecialReviewList(data);
+  }
+
+    useEffect(() => {
+      if(reviewContract) fetchSpecialReviews();
+  }, [address, reviewContract]);
     
     const handleReviewChange = (e) => {
       setReviewText(e.target.value);
@@ -147,7 +157,13 @@ export default function Movie() {
       </div>
       <div className="review-columns">
       <span id="special-column">
-        Special Column
+      {specialReviewsList.length > 0
+        ? specialReviewsList.map((review, i) => (
+            console.log(review)
+          ))
+        : (
+          <span>There are no reviews</span>
+        )}
       </span>
       <span id="normal-column">
       {reviewList.length > 0
