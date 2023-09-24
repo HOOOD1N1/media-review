@@ -1,4 +1,4 @@
-import React, { useContext, createContext } from 'react';
+import React, { useContext, createContext, useEffect } from 'react';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 import { useAddress, useContract, useMetamask, useContractWrite } from '@thirdweb-dev/react';
@@ -8,8 +8,11 @@ import { EditionMetadataWithOwnerOutputSchema } from '@thirdweb-dev/sdk';
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
-  const { contract } = useContract('0xaa55C232933515909BfF5C2e79542DB26Eb5AD99');
-  // if it doesn't work, try
+  const { contract: reviewContract, isLoading, error } = useContract('0x2A0FeD3EAAba000B2a81aB8e411925B56D11B4DB');
+  const { contract } = useContract('0xbf6b5BD3FfA8025e9a8B9164aEe88992DAE83a19');
+
+  // const setUp = async() => {
+  //   // if it doesn't work, try
   // const sdk = ThirdwebSDK.fromPrivateKey(
   //   process.env.PRIVATE_KEY, // Your wallet's private key (only required for write operations)
   //   "ethereum",
@@ -18,7 +21,13 @@ export const StateContextProvider = ({ children }) => {
   //     secretKey:  process.env.SECRET_KEY, // Use secret key if using on the server, get it from dashboard settings
   //   },
   // );
-  // const contract = await sdk.getContract("{{contract_address}}");
+  // reviewContract = await sdk.getContract('0x532aF9a2F54AFf41E942816dd33403102F031e70');
+  // console.log("Reviewcontract ", reviewContract)
+  // }
+
+  // useEffect(() => {
+  //   setUp()
+  // }, [])
 
   const address = useAddress();
   const connect = useMetamask();
@@ -92,6 +101,46 @@ export const StateContextProvider = ({ children }) => {
     return parsedDonations;
   }
 
+  const addReview = async (_movieId, _username, _userId, _reviewText, _reviewGrade, _profile_image) => {
+    try {
+      
+      console.log("Add a new review ");
+      console.log("The new review is: " + "reviewContract: " + reviewContract + "movieId: " + _movieId + " _username: " + _username + " _userId: " + _userId + " _reviewText: " + _reviewText + " _reviewGrade: " + _reviewGrade+ " _profile_image: " + _profile_image)
+      const data = await reviewContract.call('addReview',
+        [_movieId,
+        _username, 
+        _userId, 
+        _reviewText, 
+        _reviewGrade, 
+        _profile_image
+      ])
+      console.log("data is ", data)
+      if(data === 0 || data === "0"){
+        throw new Error("user can't send review again");
+      }
+
+      console.log("reviewContract call success", data)
+    } catch (error) {
+      console.log("reviewContract call failure", error)
+    }
+  }
+
+  const getAllReviewsOfGivenMovie = async (_movieId) => {
+    const campaigns = await reviewContract.call('getAllReviewsOfGivenMovie', [_movieId]);
+
+    const parsedReviews = campaigns.map((review, i) => ({
+        username: review.username,
+        userId: review.userId,
+        userAddress: review.userAddress,
+        reviewText: review.reviewText,
+        reviewGrade: review.reviewGrade,
+        profile_image: review.profile_image,
+        pId: i
+    }));
+
+    return parsedReviews;
+  }
+
 
   return (
     <StateContext.Provider
@@ -103,7 +152,10 @@ export const StateContextProvider = ({ children }) => {
         getCampaigns,
         getUserCampaigns,
         donate,
-        getDonations
+        getDonations,
+        reviewContract,
+        addReview,
+        getAllReviewsOfGivenMovie
       }}
     >
       {children}

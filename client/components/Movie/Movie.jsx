@@ -5,7 +5,6 @@ import { useLocation } from "react-router-dom";
 import { useStateContext } from '../../context/index.jsx';
 import CreateCampaignButton from "../CreateCampaignButton/CreateCampaignButton";
 import ReviewCard from "../ReviewCard/ReviewCard";
-import {useReviewStateContextProvider} from '../../context/reviewContext/index.jsx';
 
 export default function Movie() {
 
@@ -16,7 +15,7 @@ export default function Movie() {
   const [reviewList, setReviewList] = useState([]);
   const [showErrorBanner, setShowErrorBanner] = useState("");
   const location = useLocation();
-  const { address, contract, connect, addReview, getAllReviewsOfGivenMovie} = useReviewStateContextProvider();
+  const { address, reviewContract, connect, addReview, getAllReviewsOfGivenMovie} = useStateContext();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var number = 0;
   var i = location.pathname.length - 1;
@@ -137,7 +136,7 @@ export default function Movie() {
             styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
             isDisabled={address ? true : false}
             handleClick={() =>  {
-              if(address === undefined || address === "" || !address) {
+              if(!address) {
                 connect()
               }
             }}
