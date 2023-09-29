@@ -64,7 +64,7 @@ app.get('/query/search', async(req, res) => {
     if (result.rows) res.send(JSON.stringify({ results: result.rows }))
 });
 
-app.post('/main/user/:id', async(req, res) => {
+app.get('/main/user/:id', async(req, res) => {
     var userId = req.params.id;
     console.log(userId);
     try {

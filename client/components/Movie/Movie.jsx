@@ -55,7 +55,9 @@ export default function Movie() {
     const userId = JSON.parse(localStorage.getItem('user')).payload.userId;
     console.log('sending review');
     try {
-      await addReview(number, "_username", userId, reviewText, reviewGrade, "profile_image");
+      const initialUserData = await fetch(`http://localhost:8888/main/user/${userId}`);
+      const parsedUserData = await initialUserData.json();
+      await addReview(number, parsedUserData.username, userId, reviewText, reviewGrade, parsedUserData.profile_image );
     } catch(error){
       console.log(error);
       setShowErrorBanner(error)
@@ -79,6 +81,7 @@ export default function Movie() {
 
     const fetchSpecialReviews = async () => {
       const data = await getAllReviewsOfGivenMovie(number);
+      console.log("Show data ", data)
       setSpecialReviewList(data);
   }
 
@@ -159,7 +162,7 @@ export default function Movie() {
       <span id="special-column">
       {specialReviewsList.length > 0
         ? specialReviewsList.map((review, i) => (
-            console.log(review)
+          <ReviewCard id={i} review={review}/>
           ))
         : (
           <span>There are no reviews</span>

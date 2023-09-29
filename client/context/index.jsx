@@ -132,8 +132,8 @@ export const StateContextProvider = ({ children }) => {
         username: review.username,
         userId: review.userId,
         userAddress: review.userAddress,
-        reviewText: review.reviewText,
-        reviewGrade: review.reviewGrade,
+        review_text: review.reviewText,
+        review_grade: review.reviewGrade,
         profile_image: review.profile_image,
         pId: i
     }));

@@ -9,7 +9,7 @@ export default function ReviewCard({key, review}) {
                 <span id="reviewer_username">{review.username}</span>
                 <span id="shown_review_grade">{review.review_grade}</span>
             </div>
-            <div>ReviewText is {review.review}</div>
+            <div>ReviewText is {review.review_text}</div>
         </div>
         );
 }
