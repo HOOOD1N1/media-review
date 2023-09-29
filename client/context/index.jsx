@@ -1,14 +1,14 @@
 import React, { useContext, createContext, useEffect } from 'react';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
-import { useAddress, useContract, useMetamask, useContractWrite } from '@thirdweb-dev/react';
+import { useAddress, useContract, useMetamask, useDisconnect } from '@thirdweb-dev/react';
 import { ethers } from 'ethers';
 import { EditionMetadataWithOwnerOutputSchema } from '@thirdweb-dev/sdk';
 
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
-  const { contract: reviewContract, isLoading, error } = useContract('0x2A0FeD3EAAba000B2a81aB8e411925B56D11B4DB');
+  const { contract: reviewContract, isLoading, error } = useContract('0xa79F1E2774c9063AB7ec974c9f79155059a4694E');
   const { contract } = useContract('0xbf6b5BD3FfA8025e9a8B9164aEe88992DAE83a19');
 
   // const setUp = async() => {
@@ -30,6 +30,7 @@ export const StateContextProvider = ({ children }) => {
   // }, [])
 
   const address = useAddress();
+  const disconnect = useDisconnect();
   const connect = useMetamask();
 
   const publishCampaign = async (form) => {
@@ -155,7 +156,8 @@ export const StateContextProvider = ({ children }) => {
         getDonations,
         reviewContract,
         addReview,
-        getAllReviewsOfGivenMovie
+        getAllReviewsOfGivenMovie,
+        disconnect
       }}
     >
       {children}

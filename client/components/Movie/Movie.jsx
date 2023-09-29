@@ -16,7 +16,7 @@ export default function Movie() {
   const [specialReviewsList, setSpecialReviewList] = useState([]);
   const [showErrorBanner, setShowErrorBanner] = useState("");
   const location = useLocation();
-  const { address, reviewContract, connect, addReview, getAllReviewsOfGivenMovie} = useStateContext();
+  const { address, reviewContract, connect, addReview, getAllReviewsOfGivenMovie, disconnect} = useStateContext();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   var number = 0;
   var i = location.pathname.length - 1;
@@ -76,6 +76,7 @@ export default function Movie() {
           }
   }
     useEffect(() => {
+      console.log("address is ", address)
      handleFetchedReviewList();
     }, []);
 
@@ -86,7 +87,7 @@ export default function Movie() {
   }
 
     useEffect(() => {
-      if(reviewContract) fetchSpecialReviews();
+      if(reviewContract && (address !== null || address !== "")) fetchSpecialReviews();
   }, [address, reviewContract]);
     
     const handleReviewChange = (e) => {
@@ -110,6 +111,21 @@ export default function Movie() {
         handleReview();
       }
     }
+
+    const handleConnectionButton = (e) =>  {
+      console.log("Try connecting...");
+      if(!address) {
+        console.log("Connecting...");
+        connect();
+        console.log("Connected");
+        e.target.innerText = "Connected";
+      } else {
+        console.log("Disconnecting...");
+        disconnect();
+        console.log("Disconnected");
+        e.target.innerText = "Connect for special vote"
+      }
+  }
 
   return (
     <>
@@ -147,12 +163,7 @@ export default function Movie() {
             btnType="button"
             title={address ? 'Connected' : 'Connect for special vote'}
             styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
-            isDisabled={address ? true : false}
-            handleClick={() =>  {
-              if(!address) {
-                connect()
-              }
-            }}
+            handleClick={handleConnectionButton}
         />
         <input type="number" name="review_grade" id="review_grade" max={10} min={0} onChange={e => handleReviewGradeChange(e)}/>
           <button className="editor_card_button" onClick={() => chooseReviewHandler()}>Submit</button>
