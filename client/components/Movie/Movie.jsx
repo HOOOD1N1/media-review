@@ -87,7 +87,8 @@ export default function Movie() {
   }
 
     useEffect(() => {
-      if(reviewContract && (address !== null || address !== "")) fetchSpecialReviews();
+      console.log("new address is ", address)
+      if(reviewContract && (address !== undefined || address !== "")) fetchSpecialReviews();
   }, [address, reviewContract]);
     
     const handleReviewChange = (e) => {
