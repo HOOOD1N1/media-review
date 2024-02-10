@@ -10,10 +10,10 @@
     border-bottom: 1px black solid;
     min-height: 75px;
     /* align-items: center; */
-    position: fixed;
+    
     top: 0;
     z-index: 2;
-    background-color: #fff0e5;
+    background-color: #282c34;
 }
 
 .logo img {
@@ -62,7 +62,7 @@
     padding: 10px;
     height: 40px;
     margin: auto;
-    width: 80px;
+    width: fit-content;
     min-width: 76px;
     position: relative;
     top: 5px;

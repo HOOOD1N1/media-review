@@ -2,6 +2,7 @@
     display: grid;
     grid-template-rows: 20% 47% 33%;
     background-color: #fff0e5;
+    height: 100vh;
 }
 
 .container {

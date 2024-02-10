@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import MovieCard from "../MovieCard/MovieCard";
+import './Cardlist.css';
 
 export default function CardList(props) {
 
 
   return (
-    <div className="list">
+    <div className="card-list">
       {props.cards
         ? props.cards?.map((card, i) => (
             <MovieCard
