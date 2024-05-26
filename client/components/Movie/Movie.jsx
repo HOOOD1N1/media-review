@@ -29,7 +29,6 @@ export default function Movie() {
 
   const handleReview = async () => {
     const userId = JSON.parse(localStorage.getItem('user')).payload.userId;
-    console.log('sending review');
     const review = await fetch(`http://localhost:8888/review/${number}`, {
         
             method: "POST",
@@ -40,15 +39,15 @@ export default function Movie() {
               userId: userId,
               reviewText: reviewText,
               reviewGrade: reviewGrade
-            })
-          
-        }
-        );
+            }) 
+        });
         const jsonLikes = await review.json();
+        console.log(jsonLikes);
         if(jsonLikes.message === "REVIEW_ALREADY_EXISTS") {
           setShowErrorBanner("You already wrote a review for this movie");
+        } else {
+          window.location.reload();
         }
-        setReviewsList([jsonLikes, ...reviewsList]);
 }
 
   const handleSpecialReview = async () => {
@@ -69,15 +68,17 @@ export default function Movie() {
     const fetchedReviewList = await fetch(`http://localhost:8888/reviews/${number}`);
 
       const reviewListJSON = await fetchedReviewList.json();
-      // console.log("The reviewList is ", reviewListJSON);
           if(reviewListJSON){
-            setReviewList(reviewListJSON);
+            setReviewList(reviewListJSON.map(review => 
+            {
+              return {profile_image: review.profile_image, username: review.username, review_grade: review.review_grade, review_text: review.review}
+            }));
             setNrReviews(reviewListJSON.length)
           }
   }
     useEffect(() => {
       console.log("address is ", address)
-     handleFetchedReviewList();
+      handleFetchedReviewList();
     }, []);
 
     const fetchSpecialReviews = async () => {
@@ -182,9 +183,12 @@ export default function Movie() {
       </span>
       <span id="normal-column">
       {reviewList.length > 0
-        ? reviewList.map((review, i) => (
+        ? reviewList.map((review, i) => {
+          console.log("Review is", review)
+          return (
             <ReviewCard id={i} review={review}/>
-          ))
+          )}
+        )
         : (
           <span>There are no reviews</span>
         )}
